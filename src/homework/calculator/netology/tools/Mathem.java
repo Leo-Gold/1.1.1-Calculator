@@ -42,7 +42,7 @@ public class Mathem {
                 break;
             }
         }
-
+        bracketSearch();
     }
 
     //нахождение всего числа
