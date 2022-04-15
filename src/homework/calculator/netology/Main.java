@@ -14,11 +14,5 @@ public class Main {
     String ask = scanner.nextLine();
     math.expressionIteration(ask);
     math.bracketSearch();
-
-//    int a = calc.plus.apply(1, 2);
-//    int b = calc.minus.apply(1,1);
-//    int c = calc.devide.apply(a, b);
-//
-//    calc.println.accept(c);
   }
 }
