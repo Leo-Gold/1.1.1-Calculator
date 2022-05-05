@@ -1,98 +1,106 @@
 package homework.calculator.netology.tools;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 public class Mathem {
-    private static List<Integer> number = new ArrayList<>();
-    private static List<Character> sign = new ArrayList<>();
-    private static int fei = 0; //for expressionIteration
-    private static final StringBuilder sbNumber = new StringBuilder();
-    private static final Calculator calc = new Calculator();
-    private static int correctBracket = 0;
-    private static int countNumber = 0;
-    private static int countSign = 0;
+    private List<Integer> numberList = new ArrayList<>();
+    private List<Character> signList = new ArrayList<>();
+    private int sliderString = 0;
+    private Calculator calc = new Calculator();
+    private int correctBracket = 0;
+    private int countNumber = 0;
+    private int countSign = 0;
+    private int resultExpression;
 
 // разделение строки на числа и символы
-    public void expressionIteration(String expression) {
-        for (; fei < expression.length(); fei++) {
-            if (Character.isDigit(expression.charAt(fei))) {
-                addedNumberValue(expression);
-                number.add(Integer.parseInt(String.valueOf(sbNumber)));
-                sbNumber.delete(0, sbNumber.length());
+    public void expressionIteration(String expression) throws RuntimeException, RuntimeZeroException {
+        sliderString = 0;
+        char currentChar;
+        ArrayList<Character> calculableSingChars = new ArrayList<Character>() {{
+            add('+');
+            add('*');
+            add('-');
+            add('/');
+        }};
+
+        for (; sliderString < expression.length(); sliderString++) {
+            currentChar = expression.charAt(sliderString);
+
+            if (Character.isDigit(currentChar)) {
+                numberList.add(addedNumberValue(expression));
                 countNumber++;
                 unaryMinus();
-            } else if (expression.charAt(fei) == '*' || expression.charAt(fei) == '/' || expression.charAt(fei) == '+' || expression.charAt(fei) == '-') {
-                sign.add(expression.charAt(fei));
+            } else if (calculableSingChars.contains(currentChar)) {
+                signList.add(currentChar);
                 countSign++;
-            } else if (expression.charAt(fei) == ')') {
+            } else if (currentChar == ')') {
                 correctBracket--;
                 if (correctBracket == -1) {
-                    System.out.println("скобки раставлены не верное");
-                    break;
+                    throw new RuntimeException();
                 } else {
-                    sign.add(expression.charAt(fei));
+                    signList.add(currentChar);
                 }
-            } else if (expression.charAt(fei) == '(') {
+            } else if (currentChar == '(') {
                 correctBracket++;
-                sign.add(expression.charAt(fei));
-            } else if (expression.charAt(fei) != ' ') {
-                System.out.println("выражение не валидно присутствуют лишние символы");
-                break;
+                signList.add(currentChar);
+            } else if (currentChar != ' ') {
+                throw new RuntimeException();
             }
         }
         bracketSearch();
     }
 
     //нахождение всего числа
-    private void addedNumberValue(String expression) {
-        for (; fei < expression.length(); fei++) {
-            if (Character.isDigit(expression.charAt(fei))) {
-                sbNumber.append(expression.charAt(fei));
+    private int addedNumberValue(String expression) {
+        StringBuilder sbNumber = new StringBuilder();
+        for (; sliderString < expression.length(); sliderString++) {
+            if (Character.isDigit(expression.charAt(sliderString))) {
+                sbNumber.append(expression.charAt(sliderString));
             } else {
-                fei--;
+                sliderString--;
                 break;
             }
         }
+        return Integer.parseInt(String.valueOf(sbNumber));
     }
 
 
-    public void bracketSearch() {
-        if (!sign.contains(')')) {
-            expressionCount(number, sign, 0);
-        } else {
-
+    public void bracketSearch() throws RuntimeZeroException, RuntimeException {
+        if (!signList.contains(')')) {
+            expressionCount(numberList, signList, 0);
+        } else if (correctBracket != 0){
+            throw new RuntimeException();
+        } else{
             List<Integer> tempNumber = new ArrayList<>();
             List<Character> tempSign = new ArrayList<>();
             int openBracket = 0,
-                    closeBracket = sign.indexOf(')'),
+                    closeBracket = signList.indexOf(')'),
                     countBracket = 0;
             for (int i = 0; i <= closeBracket; i++) {
-                if (sign.get(i) == '(') {
+                if (signList.get(i) == '(') {
                     countBracket++;
                     openBracket = i;
                 }
             }
             for (; openBracket <= closeBracket; closeBracket--) {
-                if (sign.get(closeBracket) == '(' || sign.get(closeBracket) == ')') {
-                    sign.remove(closeBracket);
+                if (signList.get(closeBracket) == '(' || signList.get(closeBracket) == ')') {
+                    signList.remove(closeBracket);
                 } else {
-                    tempSign.add(0, sign.remove(closeBracket));
+                    tempSign.add(0, signList.remove(closeBracket));
                 }
             }
 
             int startNumber = openBracket - countBracket;
             int endNumber = startNumber + tempSign.size() + 1;
             for (; startNumber < endNumber; endNumber--) {
-                tempNumber.add(0, number.remove(endNumber));
+                tempNumber.add(0, numberList.remove(endNumber));
             }
 
-            expressionCount(tempNumber, tempSign, openBracket);
+            expressionCount(tempNumber, tempSign, startNumber + 1);
         }
     }
-
-    private void expressionCount(List<Integer> arrNumber, List<Character> arrSign, int index) {
+    private void expressionCount(List<Integer> arrNumber, List<Character> arrSign, int index) throws RuntimeZeroException, RuntimeException {
         for (int i = 0; i < arrSign.size(); i++) {
             switch (arrSign.get(i)) {
                 case '*':
@@ -105,14 +113,10 @@ public class Mathem {
                     int first = arrNumber.remove(i);
                     int second = arrNumber.remove(i);
                     if (second != 0) {
-                        arrNumber.add(i, calc.devide.apply(first, second));
+                        arrNumber.add(i, calc.divide.apply(first, second));
                         i--;
                     } else {
-                        System.out.println("у вас деление на 0");
-                        arrNumber.clear();
-                        arrSign.clear();
-                        number.clear();
-                        sign.clear();
+                        throw new RuntimeZeroException();
                     }
                     break;
             }
@@ -131,28 +135,34 @@ public class Mathem {
                     break;
             }
         }
-        if (!number.isEmpty()) {
-            number.add(index, arrNumber.remove(0));
-            if (number.size() == 1) {
-                calc.println.accept(number.remove(0));
+        if (!numberList.isEmpty()) {
+            numberList.add(index, arrNumber.remove(0));
+            if (numberList.size() == 1) {
+                resultExpression = numberList.remove(0);
             } else {
                 bracketSearch();
             }
+        } else {
+            numberList.add(index, arrNumber.remove(0));
+            bracketSearch();
         }
-
     }
 
     //добавление унарного минуса или плюса
-    private void unaryMinus() {
-        if (countSign == countNumber && sign.get(sign.size() - 1) == '-') {
-            number.add(number.remove(number.size() - 1) * -1);
-            sign.remove(sign.size() - 1);
+    private void unaryMinus() throws RuntimeException {
+        if (countSign == countNumber && signList.get(signList.size() - 1) == '-') {
+            numberList.add(numberList.remove(numberList.size() - 1) * -1);
+            signList.remove(signList.size() - 1);
             countSign--;
-        } else if (countSign == countNumber && sign.get(sign.size() - 1) == '+') {
-            sign.remove(sign.size() - 1);
+        } else if (countSign == countNumber && signList.get(signList.size() - 1) == '+') {
+            signList.remove(signList.size() - 1);
             countSign--;
-        } else if (countSign == countNumber && (sign.get(sign.size() - 1) == '*' || sign.get(sign.size() - 1) == '/')){
-            System.out.println("у вас лишние симвлы");
+        } else if (countSign == countNumber && (signList.get(signList.size() - 1) == '*' || signList.get(signList.size() - 1) == '/')){
+            throw new RuntimeException();
         }
+    }
+
+    public int getResultExpression() {
+        return resultExpression;
     }
 }

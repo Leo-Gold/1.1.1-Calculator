@@ -2,6 +2,8 @@ package homework.calculator.netology;
 
 import homework.calculator.netology.tools.Calculator;
 import homework.calculator.netology.tools.Mathem;
+import homework.calculator.netology.tools.RuntimeException;
+import homework.calculator.netology.tools.RuntimeZeroException;
 
 import java.util.Scanner;
 
@@ -11,13 +13,13 @@ public class Main {
   private static final Scanner scanner = new Scanner(System.in);
   private static boolean start = true;
 
-  public static void main(String[] args) {
+  public static void main(String[] args) throws RuntimeException, RuntimeZeroException {
     while (start){
       message();
     }
   }
 
-  private static void message() {
+  private static void message() throws RuntimeException, RuntimeZeroException {
     System.out.println("1 - рассчитать выражение");
     System.out.println("2 - возведение в квадрат");
     System.out.println("3 - модуль числа");
@@ -27,7 +29,7 @@ public class Main {
     usersSet();
   }
 
-  public static void usersSet(){
+  public static void usersSet() throws RuntimeException, RuntimeZeroException {
     int input = Integer.parseInt(scanner.next());
     scanner.nextLine();
     switch (input){
@@ -51,9 +53,10 @@ public class Main {
     }
   }
 
-  private static void calculatorInput() {
+  private static void calculatorInput() throws RuntimeException, RuntimeZeroException {
     String input = scanner.nextLine();
     math.expressionIteration(input);
+    calc.println.accept(math.getResultExpression());
   }
 
   private static void square() {
