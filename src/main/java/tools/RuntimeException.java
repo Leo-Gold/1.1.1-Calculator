@@ -1,4 +1,4 @@
-package homework.calculator.netology.tools;
+package main.java.tools;
 
 public class RuntimeException extends Exception {
     public RuntimeException() {

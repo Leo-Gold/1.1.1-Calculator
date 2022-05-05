@@ -1,4 +1,4 @@
-package homework.calculator.netology.tools;
+package main.java.tools;
 
 import java.util.ArrayList;
 import java.util.List;

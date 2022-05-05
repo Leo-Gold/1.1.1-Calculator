@@ -1,9 +1,9 @@
-package homework.calculator.netology;
+package main.java;
 
-import homework.calculator.netology.tools.Calculator;
-import homework.calculator.netology.tools.Mathem;
-import homework.calculator.netology.tools.RuntimeException;
-import homework.calculator.netology.tools.RuntimeZeroException;
+import main.java.tools.Calculator;
+import main.java.tools.Mathem;
+import main.java.tools.RuntimeException;
+import main.java.tools.RuntimeZeroException;
 
 import java.util.Scanner;
 
