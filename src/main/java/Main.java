@@ -1,9 +1,7 @@
-package main.java;
-
-import main.java.tools.Calculator;
-import main.java.tools.Mathem;
-import main.java.tools.RuntimeException;
-import main.java.tools.RuntimeZeroException;
+import tools.Calculator;
+import tools.Mathem;
+import tools.RuntimeException;
+import tools.RuntimeZeroException;
 
 import java.util.Scanner;
 

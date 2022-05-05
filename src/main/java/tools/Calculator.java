@@ -1,4 +1,4 @@
-package main.java.tools;
+package tools;
 
 import java.util.function.Consumer;
 import java.util.function.Predicate;
