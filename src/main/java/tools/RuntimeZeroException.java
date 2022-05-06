@@ -1,6 +1,6 @@
 package tools;
-public class RuntimeZeroException  extends Exception {
+public class RuntimeZeroException  extends ArithmeticException {
     public RuntimeZeroException() {
-        super("деление на 0");
+        super("division by zero");
     }
 }

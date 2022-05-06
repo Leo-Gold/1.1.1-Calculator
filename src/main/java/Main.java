@@ -6,9 +6,8 @@ import tools.RuntimeZeroException;
 import java.util.Scanner;
 
 public class Main {
-  private static final Calculator calc = new Calculator();
-  private static final Mathem math = new Mathem();
-  private static final Scanner scanner = new Scanner(System.in);
+  private static Calculator calc = new Calculator();
+  private static  Scanner scanner = new Scanner(System.in);
   private static boolean start = true;
 
   public static void main(String[] args) throws RuntimeException, RuntimeZeroException {
@@ -47,14 +46,15 @@ public class Main {
         start = false;
         break;
       default:
-        System.out.println("комманда не найдена");
+        System.out.println("команда не найдена");
     }
   }
 
   private static void calculatorInput() throws RuntimeException, RuntimeZeroException {
+    Mathem math = new Mathem();
     String input = scanner.nextLine();
-    math.expressionIteration(input);
-    calc.println.accept(math.getResultExpression());
+    int result = math.expressionIteration(input);
+    calc.println.accept(result);
   }
 
   private static void square() {

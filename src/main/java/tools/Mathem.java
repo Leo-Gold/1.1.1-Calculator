@@ -6,16 +6,15 @@ import java.util.List;
 public class Mathem {
     private List<Integer> numberList = new ArrayList<>();
     private List<Character> signList = new ArrayList<>();
-    private int sliderString = 0;
     private Calculator calc = new Calculator();
+    private int sliderString = 0;
     private int correctBracket = 0;
-    private int countNumber = 0;
-    private int countSign = 0;
     private int resultExpression;
 
 // разделение строки на числа и символы
-    public void expressionIteration(String expression) throws RuntimeException, RuntimeZeroException {
-        sliderString = 0;
+    public int expressionIteration(String expression) throws RuntimeException, RuntimeZeroException {
+        int countNumber = 0;
+        int countSign = 0;
         char currentChar;
         ArrayList<Character> calculableSingChars = new ArrayList<Character>() {{
             add('+');
@@ -30,7 +29,7 @@ public class Mathem {
             if (Character.isDigit(currentChar)) {
                 numberList.add(addedNumberValue(expression));
                 countNumber++;
-                unaryMinus();
+                countSign = unaryMinus(countNumber, countSign);
             } else if (calculableSingChars.contains(currentChar)) {
                 signList.add(currentChar);
                 countSign++;
@@ -49,6 +48,7 @@ public class Mathem {
             }
         }
         bracketSearch();
+        return resultExpression;
     }
 
     //нахождение всего числа
@@ -77,12 +77,14 @@ public class Mathem {
             int openBracket = 0,
                     closeBracket = signList.indexOf(')'),
                     countBracket = 0;
+            // поиск открывающей скобки
             for (int i = 0; i <= closeBracket; i++) {
                 if (signList.get(i) == '(') {
                     countBracket++;
                     openBracket = i;
                 }
             }
+            // перенос скобок знаком действия на подсчёт
             for (; openBracket <= closeBracket; closeBracket--) {
                 if (signList.get(closeBracket) == '(' || signList.get(closeBracket) == ')') {
                     signList.remove(closeBracket);
@@ -90,7 +92,7 @@ public class Mathem {
                     tempSign.add(0, signList.remove(closeBracket));
                 }
             }
-
+            // нахождение чисел в скобках начала и конца
             int startNumber = openBracket - countBracket;
             int endNumber = startNumber + tempSign.size() + 1;
             for (; startNumber < endNumber; endNumber--) {
@@ -135,7 +137,7 @@ public class Mathem {
                     break;
             }
         }
-        if (!numberList.isEmpty()) {
+        if(!numberList.isEmpty()) {
             numberList.add(index, arrNumber.remove(0));
             if (numberList.size() == 1) {
                 resultExpression = numberList.remove(0);
@@ -149,7 +151,7 @@ public class Mathem {
     }
 
     //добавление унарного минуса или плюса
-    private void unaryMinus() throws RuntimeException {
+    private int unaryMinus(int countNumber, int countSign) throws RuntimeException {
         if (countSign == countNumber && signList.get(signList.size() - 1) == '-') {
             numberList.add(numberList.remove(numberList.size() - 1) * -1);
             signList.remove(signList.size() - 1);
@@ -160,9 +162,6 @@ public class Mathem {
         } else if (countSign == countNumber && (signList.get(signList.size() - 1) == '*' || signList.get(signList.size() - 1) == '/')){
             throw new RuntimeException();
         }
-    }
-
-    public int getResultExpression() {
-        return resultExpression;
+        return countSign;
     }
 }
