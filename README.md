@@ -2,9 +2,9 @@
 # Задача "Использование JUnit"
 
  - [x] написать модульные тесты к одной или к не скольким домашней работе
-   [решение](/src/test/TestConcatValidArgumentSuccess.java)
+   [решение](src/test/TestConcatValidArgumentSuccess.java)
 
 # Задача "JUnit + Hamcrest"
  - [x] Перепишите ваши тесты из первого задания в стиле Hamcrest
  - [x] Напишите ещё минимум 2 теста, стараясь использовать те фичи Hamcrest, которых нет в стандартных ассертах JUnit
-   [решение](/src/test/TestHamcrest.java)
+   [решение](src/test/TestHamcrest.java)
