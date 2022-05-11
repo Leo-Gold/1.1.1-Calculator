@@ -62,7 +62,7 @@ public class Mathem {
                 break;
             }
         }
-        return Integer.parseInt(String.valueOf(sbNumber));
+        return Integer.parseInt(sbNumber.toString());
     }
 
 

@@ -1,11 +1,12 @@
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import tools.Mathem;
 import tools.RuntimeException;
 import tools.RuntimeZeroException;
 
 public class TestConcatValidArgumentSuccess {
 
-    @org.junit.jupiter.api.Test
+    @Test
     public void testLongExpression() throws RuntimeException, RuntimeZeroException {
         // given:
         Mathem math = new Mathem();
@@ -15,14 +16,14 @@ public class TestConcatValidArgumentSuccess {
         Assertions.assertEquals(expectedResult, result);
     }
 
-    @org.junit.jupiter.api.Test
+    @Test
     public void testDivideZero() {
         Mathem math = new Mathem();
         String expression = "(67 + 34) / ((24/2) - 12)";
         Assertions.assertThrows(ArithmeticException.class, () -> math.expressionIteration(expression));
     }
 
-    @org.junit.jupiter.api.Test
+    @Test
     public void testOneValue() throws RuntimeException, RuntimeZeroException {
         Mathem math = new Mathem();
         String exception = "254";
@@ -31,7 +32,7 @@ public class TestConcatValidArgumentSuccess {
         Assertions.assertEquals(expectedResult, result);
     }
 
-    @org.junit.jupiter.api.Test
+    @Test
     public void testNotValidExpression() {
         Mathem math = new Mathem();
         String expression = "67 + 34) / ((24/2) + 12)";
