@@ -1,3 +1,4 @@
+import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
 import tools.Calculator;
 import tools.Mathem;
@@ -5,10 +6,6 @@ import tools.RuntimeException;
 import tools.RuntimeZeroException;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.*;
-
 
 public class TestHamcrest {
 
@@ -18,14 +15,20 @@ public class TestHamcrest {
         String exception = "34+6*(13 + -3) + 45+5 * 23";
         int result = math.expressionIteration(exception);
         int expectedResult = 254;
-        assertEquals(result, expectedResult);
+        assertThat(result, Matchers.equalTo(expectedResult));
     }
 
     @Test
     public void test2() {
         Mathem math = new Mathem();
         String expression = "(67 + 34) / ((24/2) - 12)";
-        assertThrows(RuntimeZeroException.class, () -> math.expressionIteration(expression), "Деление на 0");
+        boolean expectedResult = false;
+        try {
+            math.expressionIteration(expression);
+        } catch (RuntimeException | RuntimeZeroException e) {
+            expectedResult = true;
+        }
+        assertThat(true, Matchers.equalTo(expectedResult));
     }
 
     @Test
@@ -34,22 +37,28 @@ public class TestHamcrest {
         String exception = "254";
         int expectedResult = 254;
         int result = math.expressionIteration(exception);
-        assertEquals(result, expectedResult);
+        assertThat(result, Matchers.equalTo(expectedResult));
     }
 
     @Test
     public void test4() {
         Mathem math = new Mathem();
         String expression = "67 + 34) / ((24/2) + 12)";
-        assertThrows(Exception.class, () -> math.expressionIteration(expression));
+        boolean expectedResult = false;
+        try {
+            math.expressionIteration(expression);
+        } catch (RuntimeException e) {
+            expectedResult = true;
+        }
+        assertThat(true, Matchers.equalTo(expectedResult));
     }
 
     @Test
     public void test5() {
         Calculator calculator = new Calculator();
-        int exception = 254;
+        int exception = 100;
         boolean result = calculator.isPositive.test(exception);
-        assertTrue(result);
+        assertThat(true, Matchers.equalTo(result));
     }
 
     @Test
@@ -57,7 +66,7 @@ public class TestHamcrest {
         Calculator calculator = new Calculator();
         int exception = 254;
         boolean result = calculator.isPositive.test(exception);
-        assertTrue(result);
+        assertThat(result, Matchers.is(true));
     }
 
     @Test
@@ -65,6 +74,6 @@ public class TestHamcrest {
         Calculator calculator = new Calculator();
         int exception = -254;
         boolean result = calculator.isPositive.test(exception);
-        assertFalse(result);
+        assertThat(result, Matchers.is(false));
     }
 }
